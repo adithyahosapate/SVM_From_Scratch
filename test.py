@@ -1,4 +1,4 @@
-from svm import SVM
+from svm_sgd import SVM
 import numpy as np
 import matplotlib.pyplot as plt
 X1=np.random.multivariate_normal([1,2],[[1,0],[0,1]],size=100)
