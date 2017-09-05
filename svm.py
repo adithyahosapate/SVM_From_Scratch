@@ -1,4 +1,5 @@
 import cvxopt
+from cvxopt import matrix
 import numpy as np
 from kernels import Kernel
 
@@ -16,12 +17,21 @@ class SVM:
 				for (j,data_2) in enumerate(self.dataset):
 					gram_matrix[i][j]=self.labels[i]*self.labels[j]*np.inner(data,data_2)
 			return gram_matrix
-		self.gram_matrix=create_gram_matrix()			
-		print(cvxopt.solvers.qp(P=-self.gram_matrix,
-						q=np.ones([self.dataset.shape[0],1]),
-						G=-np.eye(self.dataset.shape[0]),
-						h=np.zeros([self.dataset.shape[0],1]),
-						A=np.diag(self.labels),
-						b=np.zeros([self.dataset.shape[0],1]),
+		self.gram_matrix=create_gram_matrix()
+		P=-self.gram_matrix
+		q=np.ones([self.dataset.shape[0],1])
+		G=-np.eye(self.dataset.shape[0])
+		h=np.zeros([self.dataset.shape[0],1])
+		A=matrix(np.reshape([self.labels],(1,200)),(1,200), 'd')
+		b=np.zeros([self.dataset.shape[0],1])
+		print(matrix(A))			
+		print(cvxopt.solvers.qp(P=matrix(-self.gram_matrix),
+						q=matrix(np.ones([self.dataset.shape[0],1])),
+						G=matrix(-np.eye(self.dataset.shape[0])),
+						h=matrix(np.zeros([self.dataset.shape[0],1])),
+						A=A ,#matrix((self.labels).T),
+						b=matrix(np.zeros([1,])),
 						solver=None))
+	
+						
 
