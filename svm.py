@@ -3,6 +3,7 @@ from cvxopt import matrix
 import numpy as np
 from kernels import Kernel
 import matplotlib.pyplot as plt
+import matplotlib.colors as colors
 # TODO - optimize svms using Quadratic programming
 class SVM:
 	def __init__(self,dataset,labels,kernel):
@@ -42,11 +43,11 @@ class SVM:
 		self.b=self.labels[np.argmax(self.alphas)]-temp
 		def evaluate(point):
 			value=0
-			print(point)
-			for alpha,label,data in zip(self.alphas,self.labels,self.dataset):
-				value+=label*alpha*np.dot(point.T,data)
 
-			return value+self.b
+			for alpha,label,data in zip(self.alphas,self.labels,self.dataset):
+				value+=label*alpha*np.dot(data.T,point)
+
+			return value.T+self.b
 			
 
 		mesh = np.meshgrid(np.linspace(np.min(self.dataset.T[0]), np.max(self.dataset.T[0]), 100),
@@ -55,10 +56,14 @@ class SVM:
 		#print(mesh)
 		#print(xx)
 		Z=[evaluate(np.array([xxx,yyy])) for xxx, yyy in zip(xx,yy)]
-		plt.figure(figsize=(5,5))
+		fig=plt.figure(figsize=(5,5))
+		bounds = np.array([-1,0,1])
+		norm = colors.BoundaryNorm(boundaries=bounds, ncolors=3)
+		pcm = plt.pcolormesh(xx, yy, Z,
+                       	norm=norm,
+                       		cmap='RdBu_r')
 		plt.contour(xx, yy, Z, levels=[-1,0,1], linewidths=2,
                 colors='k')
-		plt.pcolormesh(xx,yy,Z)
 
 		colrs={1:'b',-1:'r'}
 		for i,x in enumerate(self.dataset):

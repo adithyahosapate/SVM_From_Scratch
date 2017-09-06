@@ -7,6 +7,6 @@ X2=np.random.multivariate_normal([-10,5],[[1,0],[0,1]],size=100)
 X=np.concatenate((X1,X2),axis=0)
 Y=np.concatenate((Y,-Y))
 svm=SVM(X,Y,"linear")
-w,b=svm.optimize()
-print(w,b)
+alphas=svm.optimize()
 svm.plot()
+
