@@ -1,23 +1,27 @@
 import numpy as np
 
 class Kernel:
-	#Source:wikipedia SVM kernels
-	def __init__(self):
-		pass
+	#Source:wikipedia SVM kernel
 
-	def linear(self,x,y):
+	def linear():
+		def f(x,y):
 		#Linear kernel
-		return np.inner(x,y)
+			return np.inner(x,y)
+		return f	
 
-	def gaussian(self,x,y,stddev):
-		exponent= -np.sqrt(np.linalg.norm(x-y)**2/(2*stddev**2))
-		return np.exp(exponent)
+	def gaussian():
+		def f(x,y,stddev=0.1):
+			exponent= -np.sqrt(np.linalg.norm(x-y,axis=0)**2/(2*stddev**2))
+			return np.exp(exponent)
+		return f
 
-	def polynomial(self,x,y,offset,d):
-		base=offset+np.inner(x,y)
-		return np.pow(base,d)
-				 	
-	def hyperbolic_tangent(self,x,y,kappa,c):
-		return np.tanh(kappa+np.dot(x,y)+c)
-
+	def polynomial():
+		def f(x,y,offset=1,d=5):
+			base=offset+np.inner(x,y)
+			return np.power(base,d)
+		return f
+	def hyperbolic_tangent():			 	
+		def f(x,y,kappa=1,c=1):
+			return np.tanh(kappa+np.dot(x,y)+c)
+		return f
 
