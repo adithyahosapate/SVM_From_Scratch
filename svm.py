@@ -18,13 +18,16 @@ class SVM:
 				for (j,data_2) in enumerate(self.dataset):
 					gram_matrix[i][j]=self.labels[i]*self.labels[j]*np.inner(data,data_2)
 			return gram_matrix
+		N=self.dataset.shape[0]
+		print(N)	
 		self.gram_matrix=create_gram_matrix()
 		P=matrix(self.gram_matrix)
-		q=matrix(np.ones([self.dataset.shape[0],1]))
-		G=matrix(-np.eye(self.dataset.shape[0]))
-		h=matrix(np.zeros([self.dataset.shape[0]]))
+		q=-matrix(np.ones([N,1]))
+		G=matrix(-np.eye(N))
+		h=matrix(np.zeros(N))
 		A=matrix(np.reshape(self.labels,(1,-1)),(1,200),'d')
-		b=matrix(np.zeros(1))			
+		b=matrix(np.zeros(1))		
+		print(P,q,G,h,A,b)	
 		solution=cvxopt.solvers.qp(P=P,
 						q=q,
 						G=G,
@@ -36,11 +39,15 @@ class SVM:
 		self.alphas=alphas
 		return alphas
 	def plot(self):
-		support_vector=self.dataset[np.argmax(self.alphas)]
+		support_vector=(self.alphas>1e-5).reshape(-1)
+		print(self.alphas)
 		temp=0
 		for alpha,label,data in zip(self.alphas,self.labels,self.dataset):
-			temp+=label*alpha*np.inner(data,support_vector)
-		self.b=self.labels[np.argmax(self.alphas)]-temp
+			temp+=label*alpha*np.inner(self.dataset[support_vector],data)
+
+
+		self.b=(self.labels[support_vector]-temp)[1]
+		
 		def evaluate(point):
 			value=0
 
