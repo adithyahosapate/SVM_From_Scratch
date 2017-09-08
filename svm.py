@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 # TODO - optimize svms using Quadratic programming
 class SVM:
-	def __init__(self,dataset,labels,kernel='polynomial'):
+	def __init__(self,dataset,labels,kernel='linear'):
 		self.dataset=dataset
 		self.labels=labels
 		
@@ -16,6 +16,8 @@ class SVM:
 			self.kernel=Kernel.gaussian()	
 		elif kernel=='polynomial':
 			self.kernel=Kernel.polynomial()	
+		elif kernel=='hyperbolic_tangent':
+			self.kernel=Kernel.hyperbolic_tangent()		
 	def optimize(self):
 		def create_gram_matrix():
 			gram_matrix=np.zeros([self.dataset.shape[0],self.dataset.shape[0]])
@@ -67,10 +69,12 @@ class SVM:
 		mesh = np.meshgrid(np.linspace(np.min(self.dataset.T[0]), np.max(self.dataset.T[0]), 100),
 				np.linspace(np.min(self.dataset.T[1]),np.max(self.dataset.T[1]), 100))
 		xx,yy=mesh
-		print (xx.shape,yy)
+		#print (xx.shape,yy)
 		#print(mesh)
-		#print(xx)
+		#for xxx in xx:
+		#	print(xxx) 
 		Z=[evaluate(np.array([xxx,yyy])) for xxx, yyy in zip(xx,yy)]
+		print(len(Z))
 		fig=plt.figure(figsize=(5,5))
 		cmap = colors.ListedColormap(['#FF0033','#99FFFF'])
 		bounds = np.array([-1,0,1])

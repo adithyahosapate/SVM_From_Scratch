@@ -7,8 +7,23 @@ X2=np.random.multivariate_normal([-10,5],[[1,0],[0,1]],size=100)
 X=np.concatenate((X1,X2),axis=0)
 Y=np.concatenate((Y,-Y))
 print(X,Y)
-svm=SVM(X,Y,"polynomial")
+svm=SVM(X,Y,"linear")
 alphas=svm.optimize()
 svm.plot()
 
+#Test 2
 
+# points_array=np.array([
+# 	[1,2],
+# 	[1.2,3.5],
+# 	[1,7],
+# 	[1.7,5.6],
+# 	[5,7],
+# 	[3.0,4.7],
+# 	[5,8]
+
+# 	])
+# labels_array=np.array([-1,1,1,-1,1,-1,1])
+# svm=SVM(points_array,labels_array,"hyperbolic_tangent")
+# alphas=svm.optimize()
+# svm.plot()
