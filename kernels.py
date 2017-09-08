@@ -11,7 +11,11 @@ class Kernel:
 
 	def gaussian():
 		def f(x,y,stddev=0.1):
-			exponent= -np.sqrt(np.linalg.norm(x-y,axis=0)**2/(2*stddev**2))
+			if len(x.shape)>1:
+				exponent= -np.sqrt(np.linalg.norm(x-y,axis=1)**2/(2*stddev**2))
+			else:
+				exponent= -np.sqrt(np.linalg.norm(x-y,axis=0)**2/(2*stddev**2))
+			    	
 			return np.exp(exponent)
 		return f
 
@@ -21,7 +25,7 @@ class Kernel:
 			return np.power(base,d)
 		return f
 	def hyperbolic_tangent():			 	
-		def f(x,y,kappa=1,c=1):
-			return np.tanh(kappa+np.dot(x,y)+c)
+		def f(x,y,kappa=10,c=1):
+			return np.tanh(kappa*np.dot(x,y)+c)
 		return f
 

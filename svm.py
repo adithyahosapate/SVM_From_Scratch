@@ -4,7 +4,6 @@ import numpy as np
 from kernels import Kernel
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
-# TODO - optimize svms using Quadratic programming
 class SVM:
 	def __init__(self,dataset,labels,kernel='linear'):
 		self.dataset=dataset
@@ -25,8 +24,7 @@ class SVM:
 				for (j,data_2) in enumerate(self.dataset):
 					gram_matrix[i][j]=self.labels[i]*self.labels[j]*self.kernel(data,data_2)
 			return gram_matrix
-		N=self.dataset.shape[0]
-		print(N)	
+		N=self.dataset.shape[0]	
 		self.gram_matrix=create_gram_matrix()
 		P=matrix(self.gram_matrix)
 		q=-matrix(np.ones([N,1]))
@@ -34,7 +32,6 @@ class SVM:
 		h=matrix(np.zeros(N))
 		A=matrix(np.reshape(self.labels,(1,-1)),(1,self.dataset.shape[0]),'d')
 		b=matrix(np.zeros(1))		
-		print(P,q,G,h,A,b)	
 		solution=cvxopt.solvers.qp(P=P,
 						q=q,
 						G=G,
@@ -49,7 +46,6 @@ class SVM:
 
 	def plot(self):
 		support_vector=np.argmax(self.alphas)
-		print(self.alphas)
 		temp=0
 		for alpha,label,data in zip(self.alphas,self.labels,self.dataset):
 			temp+=label*alpha*self.kernel(self.dataset[support_vector],data)
@@ -69,12 +65,9 @@ class SVM:
 		mesh = np.meshgrid(np.linspace(np.min(self.dataset.T[0]), np.max(self.dataset.T[0]), 100),
 				np.linspace(np.min(self.dataset.T[1]),np.max(self.dataset.T[1]), 100))
 		xx,yy=mesh
-		#print (xx.shape,yy)
-		#print(mesh)
-		#for xxx in xx:
-		#	print(xxx) 
+		
 		Z=[evaluate(np.array([xxx,yyy])) for xxx, yyy in zip(xx,yy)]
-		print(len(Z))
+		
 		fig=plt.figure(figsize=(5,5))
 		cmap = colors.ListedColormap(['#FF0033','#99FFFF'])
 		bounds = np.array([-1,0,1])
