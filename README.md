@@ -23,3 +23,7 @@ python3 test.py
 python3 test2.py
 ```
 
+## Results
+
+Results can be found in the *plots* directory
+
